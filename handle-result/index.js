@@ -1,7 +1,7 @@
 'use strict';
 
 const AWS = require("aws-sdk");
-const snsTopicArn = "";
+const snsTopicArn = "{{FAILURE_SNS_TOPIC_ARN}}";
 
 function sendSnsEvent(topicArn, subject, message) {
     return new Promise((resolve, reject) => {
