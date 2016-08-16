@@ -2,7 +2,7 @@
 
 const AWS = require("aws-sdk");
 const http = require('http');
-const snsTopicArn = "{{RESULT_SNS_TOPIC_ARN}}";
+const snsTopicArn = "%RESULT_SNS_TOPIC_ARN%";
 
 function buildResult(url, response) {
     return {
