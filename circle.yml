@@ -5,5 +5,5 @@ deployment:
   prod:
     branch: master
     commands:
-      - aws s3 sync ./handle-result s3://s3-eu-west-1.amazonaws.com/tegud-watch-code/handle-result/ --delete
-      - aws s3 sync ./make-request s3://s3-eu-west-1.amazonaws.com/tegud-watch-code/make-request/ --delete
+      - aws s3 sync ./handle-result s3://tegud-watch-code/handle-result/ --delete
+      - aws s3 sync ./make-request s3://tegud-watch-code/make-request/ --delete
