@@ -1,3 +1,9 @@
 test:
   override:
     - echo "test"
+deployment:
+  prod:
+    branch: master
+    commands:
+      - aws s3 sync ./handle-result s3://circle-production-static-site/handle-result/ --delete
+      - aws s3 sync ./make-request s3://circle-production-static-site/make-request/ --delete      
