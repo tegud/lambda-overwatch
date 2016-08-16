@@ -3,8 +3,8 @@ test:
     - echo "test"
 checkout:
   post:
-    - find . -type f -exec sed -i '' -e "s;%RESULT_SNS_TOPIC_ARN%;$RESULT_SNS_TOPIC_ARN;g" {} +
-    - find . -type f -exec sed -i '' -e "s;%FAILURE_SNS_TOPIC_ARN%;$FAILURE_SNS_TOPIC_ARN;g" {} +
+    - find . -type f -exec sed -e 's;%RESULT_SNS_TOPIC_ARN%;$RESULT_SNS_TOPIC_ARN;g' {} +
+    - find . -type f -exec sed -e 's;%FAILURE_SNS_TOPIC_ARN%;$FAILURE_SNS_TOPIC_ARN;g' {} +
 deployment:
   prod:
     branch: master
