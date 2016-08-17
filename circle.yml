@@ -3,8 +3,8 @@ test:
     - echo "test"
 checkout:
   post:
-    - sed -i 's/%RESULT_SNS_TOPIC_ARN%/$RESULT_SNS_TOPIC_ARN/g' ./make-request/index.js
-    - sed -i 's/%FAILURE_SNS_TOPIC_ARN%/$FAILURE_SNS_TOPIC_ARN/g' ./handle-result/index.js
+    - sed -i 's/%RESULT_SNS_TOPIC_ARN%/${RESULT_SNS_TOPIC_ARN}/g' ./make-request/index.js
+    - sed -i 's/%FAILURE_SNS_TOPIC_ARN%/${FAILURE_SNS_TOPIC_ARN}/g' ./handle-result/index.js
 deployment:
   prod:
     branch: master
