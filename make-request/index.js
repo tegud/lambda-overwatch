@@ -4,13 +4,23 @@ const AWS = require("aws-sdk");
 const http = require('http');
 const snsTopicArn = "%RESULT_SNS_TOPIC_ARN%";
 
-function buildResult(url, response) {
-    return {
+function buildResult(url, response, timeout, ttfb) {
+    const result = {
         url: url,
         statusCode: response.statusCode,
         success: response.statusCode === 200,
-        errorMessage: response.statusCode !== 200 ? `Error response code ${response.statusCode} from url: ${url}` : undefined
+        timeout: timeout
     };
+
+    if(success) {
+        result.timeToFirstByte = ttfb;
+
+        return result;
+    }
+
+    result.errorMessage = `Error response code ${response.statusCode} from url: ${url}`;
+
+    return result;
 }
 
 function buildTimeoutResult(url, timeout) {
@@ -43,6 +53,7 @@ exports.handler = function (event, context, callback) {
     const url = event.url;
     const timeout = event.timeout || 3000;
     let hasTimedOut;
+    const start = new Date().valueOf();
 
     console.log(`Testing url: ${url}`);
 
@@ -51,12 +62,13 @@ exports.handler = function (event, context, callback) {
     }
 
     const req = http.get(url, (res) => {
+        const end = new Date().valueOf();
         if(hasTimedOut) {
             console.log('Timed out, but response has returned eventually, do nothing.');
             return;
         }
 
-        const result = buildResult(url, res);
+        const result = buildResult(url, res, timeout, start - end);
 
         sendSnsEvent(snsTopicArn, "site-monitor-result", result)
             .then(() => callback())
