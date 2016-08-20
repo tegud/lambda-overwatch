@@ -16,3 +16,5 @@ deployment:
     commands:
       - aws s3 sync ${CIRCLE_ARTIFACTS} s3://tegud-watch-code/ --delete
       - aws lambda update-function-code --region eu-west-1 --function-name arn:aws:lambda:eu-west-1:176943816885:function:makeRequest --publish --s3-bucket tegud-watch-code --s3-key make-request.zip
+      - aws lambda update-function-code --region eu-west-1 --function-name arn:aws:lambda:eu-west-1:176943816885:function:handleHttpCheckResult --publish --s3-bucket tegud-watch-code --s3-key handle-result.zip
+      - aws lambda update-function-code --region eu-west-1 --function-name arn:aws:lambda:eu-west-1:176943816885:function:send-to-slack --publish --s3-bucket tegud-watch-code --s3-key send-to-slack.zip
