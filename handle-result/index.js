@@ -27,9 +27,9 @@ exports.handler = function (event, context, callback) {
 
     // TODO: SAVE TO S3
 
-    sendSnsEvent(snsCompleteTopicArn, `SITE RESULT: ${result.url}`, json.stringify(result))
+    sendSnsEvent(snsCompleteTopicArn, `SITE RESULT: ${result.url}`, result)
       .then(() => {
-          if(!result.success) {
+          if(result.success) {
               console.log('Site monitor ok, nothing to do');
               return new Promise(resolve => resolve());
           }
