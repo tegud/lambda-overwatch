@@ -12,7 +12,7 @@ function buildResult(url, response, timeout, ttfb) {
         timeout: timeout
     };
 
-    if(success) {
+    if(result.success) {
         result.timeToFirstByte = ttfb;
 
         return result;
