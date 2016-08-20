@@ -6,9 +6,12 @@ checkout:
     - echo $RESULT_SNS_TOPIC_ARN
     - sed -i 's/%RESULT_SNS_TOPIC_ARN%/${RESULT_SNS_TOPIC_ARN}/g' ./make-request/index.js
     - sed -i 's/%FAILURE_SNS_TOPIC_ARN%/${FAILURE_SNS_TOPIC_ARN}/g' ./handle-result/index.js
+    - sed -i 's/%COMPLETE_SNS_TOPIC_ARN%/${COMPLETE_SNS_TOPIC_ARN}/g' ./handle-result/index.js
+    - sed -i 's/%SLACK_SNS_TOPIC_ARN%/${SLACK_SNS_TOPIC_ARN}/g' ./send-to-slack/index.js
 deployment:
   prod:
     branch: master
     commands:
       - aws s3 sync ./handle-result s3://tegud-watch-code/handle-result/ --delete
       - aws s3 sync ./make-request s3://tegud-watch-code/make-request/ --delete
+      - aws s3 sync ./send-to-slack s3://tegud-watch-code/send-to-slack/ --delete

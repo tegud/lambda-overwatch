@@ -1,8 +1,7 @@
 'use strict';
 
 const AWS = require("aws-sdk");
-const snsFailureTopicArn = "%FAILURE_SNS_TOPIC_ARN%";
-const snsCompleteTopicArn = "%COMPLETE_SNS_TOPIC_ARN%";
+const snsSlackTopicArn = "%SLACK_SNS_TOPIC_ARN%";
 
 function sendSnsEvent(topicArn, subject, message) {
     return new Promise((resolve, reject) => {
@@ -27,16 +26,9 @@ exports.handler = function (event, context, callback) {
 
     // TODO: SAVE TO S3
 
-    sendSnsEvent(snsCompleteTopicArn, `SITE RESULT: ${result.url}`, json.stringify(result))
-      .then(() => {
-          if(!result.success) {
-              console.log('Site monitor ok, nothing to do');
-              return new Promise(resolve => resolve());
-          }
-
-          console.log('Site monitor fail, sending to failure SNS');
-          return sendSnsEvent(snsFailureTopicArn, `SITE FAIL: ${result.url}`, result.errorMessage || result);
-      })
+    sendSnsEvent(snsSlackTopicArn, `SITE RESULT: ${result.url}`, json.stringify({
+          "text": `Site check result: ${result.url} ${result.success ? 'was successful' : 'failed'}.`
+      }))
       .then(() => callback())
       .catch(callback);
 };
