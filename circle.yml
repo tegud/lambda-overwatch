@@ -12,6 +12,4 @@ deployment:
   prod:
     branch: master
     commands:
-      - aws s3 sync ./handle-result s3://tegud-watch-code/handle-result/ --delete
-      - aws s3 sync ./make-request s3://tegud-watch-code/make-request/ --delete
-      - aws s3 sync ./send-to-slack.zip s3://tegud-watch-code/send-to-slack/ --delete
+      - aws s3 sync ${CIRCLE_ARTIFACTS} s3://tegud-watch-code/ --delete
