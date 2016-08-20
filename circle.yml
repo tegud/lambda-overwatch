@@ -7,10 +7,11 @@ checkout:
     - sed -i "s/%FAILURE_SNS_TOPIC_ARN%/${FAILURE_SNS_TOPIC_ARN}/g" ./handle-result/index.js
     - sed -i "s/%COMPLETE_SNS_TOPIC_ARN%/${COMPLETE_SNS_TOPIC_ARN}/g" ./handle-result/index.js
     - sed -i "s/%SLACK_WEBHOOK_PATH%/${SLACK_WEBHOOK_PATH}/g" ./send-to-slack/index.js
+    - zip ./send-to-slack
 deployment:
   prod:
     branch: master
     commands:
       - aws s3 sync ./handle-result s3://tegud-watch-code/handle-result/ --delete
       - aws s3 sync ./make-request s3://tegud-watch-code/make-request/ --delete
-      - aws s3 sync ./send-to-slack s3://tegud-watch-code/send-to-slack/ --delete
+      - aws s3 sync ./send-to-slack.zip s3://tegud-watch-code/send-to-slack/ --delete
