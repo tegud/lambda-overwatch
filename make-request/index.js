@@ -68,7 +68,7 @@ exports.handler = function (event, context, callback) {
             return;
         }
 
-        const result = buildResult(url, res, timeout, start - end);
+        const result = buildResult(url, res, timeout, end - start);
 
         sendSnsEvent(snsTopicArn, "site-monitor-result", result)
             .then(() => callback())

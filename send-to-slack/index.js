@@ -8,7 +8,7 @@ const propertyFieldTitles = {
     url: 'URL',
     statusCode: 'Status Code',
     errorMessage: 'Error',
-    timeToFirstByte: 'Time to First Byte',
+    timeToFirstByte: { text: 'Time to First Byte', formatter: value => `${value}ms` },
     timeout: 'Timeout'
 };
 
@@ -34,11 +34,21 @@ exports.handler = function (event, context, callback) {
                         return fields;
                     }
 
-                    fields.push({
-            			"title": propertyFieldTitles[currentProperty],
-            			"value": result[currentProperty],
-            			"short": true
-            		});
+                    if(typeof(propertyFieldTitles[currentProperty]) === 'string') {
+                        fields.push({
+                            "title": propertyFieldTitles[currentProperty],
+                            "value": result[currentProperty],
+                            "short": true
+                        });
+                    }
+                    else {
+                        fields.push({
+                            "title": propertyFieldTitles[currentProperty].text,
+                            "value": propertyFieldTitles[currentProperty].formatter(result[currentProperty]),
+                            "short": true
+                        });
+                    }
+
 
                     return fields;
                 }, [])
