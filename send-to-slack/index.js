@@ -26,7 +26,7 @@ exports.handler = function (event, context, callback) {
 
     // TODO: SAVE TO S3
 
-    sendSnsEvent(snsSlackTopicArn, `SITE RESULT: ${result.url}`, json.stringify({
+    sendSnsEvent(snsSlackTopicArn, `SITE RESULT: ${result.url}`, JSON.stringify({
           "text": `Site check result: ${result.url} ${result.success ? 'was successful' : 'failed'}.`
       }))
       .then(() => callback())
