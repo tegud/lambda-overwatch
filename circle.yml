@@ -7,7 +7,7 @@ checkout:
     - sed -i "s/%FAILURE_SNS_TOPIC_ARN%/${FAILURE_SNS_TOPIC_ARN}/g" ./handle-result/index.js
     - sed -i "s/%COMPLETE_SNS_TOPIC_ARN%/${COMPLETE_SNS_TOPIC_ARN}/g" ./handle-result/index.js
     - sed -i "s|%SLACK_WEBHOOK_PATH%|${SLACK_WEBHOOK_PATH}|g" ./send-to-slack/index.js
-    - zip ./send-to-slack
+    - zip send-to-slack ./send-to-slack/*
 deployment:
   prod:
     branch: master
