@@ -7,7 +7,7 @@ checkout:
     - sed -i "s/%FAILURE_SNS_TOPIC_ARN%/${FAILURE_SNS_TOPIC_ARN}/g" ./handle-result/index.js
     - sed -i "s/%COMPLETE_SNS_TOPIC_ARN%/${COMPLETE_SNS_TOPIC_ARN}/g" ./handle-result/index.js
     - sed -i "s|%SLACK_WEBHOOK_PATH%|${SLACK_WEBHOOK_PATH}|g" ./send-to-slack/index.js
-    - cd make-request && zip ${CIRCLE_ARTIFACTS}/make-request-slack.zip *
+    - cd make-request && zip ${CIRCLE_ARTIFACTS}/make-request.zip *
     - cd handle-result && zip ${CIRCLE_ARTIFACTS}/handle-result.zip *
     - cd send-to-slack && zip ${CIRCLE_ARTIFACTS}/send-to-slack.zip *
 deployment:
@@ -15,3 +15,4 @@ deployment:
     branch: master
     commands:
       - aws s3 sync ${CIRCLE_ARTIFACTS} s3://tegud-watch-code/ --delete
+      - aws lambda update-function-code --function-name arn:aws:lambda:eu-west-1:176943816885:function:makeRequest --publish --s3-bucket tegud-watch-code --s3-key make-request.zip
