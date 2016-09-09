@@ -86,7 +86,14 @@ exports.handler = function (event, context, callback) {
             .catch(err => callback(err));
     });
 
-    req.on('error', callback);
+    req.on('error', error => sendSnsEvent(snsTopicArn, "site-monitor-result", {
+        success: false,
+        url: url,
+        timeout: timeout,
+        errorMessage: error.code || error
+    })
+    .then(() => callback())
+    .catch(err => callback(err)));
 
     req.end();
 };

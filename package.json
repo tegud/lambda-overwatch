@@ -12,7 +12,7 @@
   "scripts": {
     "test": "npm run lint && npm run mocha",
     "lint": "node_modules/.bin/eslint index.js handle-result/**/*.js make-request/**/*.js send-to-slack/**/*.js",
-    "mocha": "node_modules/.bin/mocha --timeout 3000 ./tests/**/*.js"
+    "mocha": "node_modules/.bin/mocha --timeout 5000 ./tests/**/*.js"
   },
   "repository": {
     "type": "git",

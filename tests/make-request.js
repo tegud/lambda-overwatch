@@ -42,4 +42,15 @@ describe('make-request', () => {
             makeRequest.handler({ url: 'http://localhost:1234' }, {}, () => { });
         }))().should.eventually.have.properties("timeToFirstByte"));
     });
+
+    describe('failure to connect', () => {
+        it('places result on SNS topic', () => (() => new Promise(resolve => {
+            awsSdk.on('SNS', '%RESULT_SNS_TOPIC_ARN%', 'message-received', payload => resolve(JSON.parse(payload.Message)));
+
+            makeRequest.handler({ url: 'http://localhost:1235' }, {}, () => { });
+        }))().should.eventually.have.properties({
+            "success": false,
+            "errorMessage": "ECONNREFUSED"
+        }));
+    });
 });
