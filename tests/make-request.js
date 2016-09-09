@@ -1,40 +1,23 @@
 'use strict';
 
+const should = require('should');
 const proxyquire = require('proxyquire').noCallThru();
-const EventEmitter = require('events');
-const http = require('http');
+const FakeHttpServer = require('./lib/fake-http-server');
+
+const awsSdk = new require('./lib/fake-aws-sdk')();
 const makeRequest = proxyquire('../make-request', {
-    'aws-sdk': {}
+    'aws-sdk': awsSdk
 });
-
-function FakeHttpServer() {
-    let eventEmitter;
-
-    var server = http.createServer((request, response) => {
-        eventEmitter.emit('request-handled');
-        response.writeHead(200);
-        response.end();
-    });
-
-    return {
-        start: () => new Promise(resolve => {
-            eventEmitter = new EventEmitter();
-            server.listen(1234, () => resolve());
-        }),
-        stop: () => new Promise(resolve => resolve(server.close())),
-        on: (eventName, fn) => new Promise(resolve => {
-            eventEmitter.on(eventName, fn);
-            resolve();
-        })
-    };
-};
 
 describe('make-request', () => {
     let httpServer;
 
     beforeEach(() => {
         httpServer = new FakeHttpServer();
-        return httpServer.start();
+        return Promise.all[
+            httpServer.start(),
+            awsSdk.start()
+        ];
     });
     afterEach(() => httpServer.stop());
 
@@ -43,4 +26,14 @@ describe('make-request', () => {
 
         makeRequest.handler({ url: 'http://localhost:1234' }, {}, () => { });
     }));
+
+    describe('successful response', () => {
+        it('places result on SNS topic', () => (() => new Promise(resolve => {
+            awsSdk.on('SNS', '%RESULT_SNS_TOPIC_ARN%', 'message-received', payload => resolve(JSON.parse(payload.Message)));
+
+            makeRequest.handler({ url: 'http://localhost:1234' }, {}, () => { });
+        }))().should.eventually.have.properties({
+            "success":true
+        }));
+    });
 });
