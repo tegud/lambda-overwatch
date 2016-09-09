@@ -53,4 +53,18 @@ describe('make-request', () => {
             "errorMessage": "ECONNREFUSED"
         }));
     });
+
+    describe('timeout', () => {
+        it('places result on SNS topic', () => httpServer.setTimeoutTo(15)
+            .then(() => new Promise(resolve => {
+                awsSdk.on('SNS', '%RESULT_SNS_TOPIC_ARN%', 'message-received', payload => resolve(JSON.parse(payload.Message)));
+
+                makeRequest.handler({ url: 'http://localhost:1234', timeout: 10 }, {}, () => { });
+            }))
+            .should.eventually.have.properties({
+                "success": false,
+                "errorMessage": "Timeout after 10ms from url: http://localhost:1234",
+                "timeout": 10
+            }));
+    });
 });

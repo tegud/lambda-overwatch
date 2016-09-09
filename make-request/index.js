@@ -25,6 +25,7 @@ function buildResult(url, response, timeout, ttfb) {
 
 function buildTimeoutResult(url, timeout) {
     return {
+        success: false,
         url: url,
         timeout: timeout,
         errorMessage: `Timeout after ${timeout}ms from url: ${url}`
@@ -55,7 +56,7 @@ exports.handler = function (event, context, callback) {
     let hasTimedOut;
     const start = new Date().valueOf();
 
-    console.log(`Testing url: ${url}`);
+    console.log(`Testing url: ${url}, with timeout: ${timeout}`);
 
     if(!url) {
         console.log(JSON.stringify(event, null, 4));
