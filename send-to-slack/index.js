@@ -25,10 +25,10 @@ exports.handler = function (event, context, callback) {
     req.write(JSON.stringify({
         attachments: [
             {
-            	"fallback": "Site check result: ${result.url} ${result.success ? 'was successful' : 'failed'}. ${result.errorMessage}",
+                "fallback": "Site check result: ${result.url} ${result.success ? 'was successful' : 'failed'}. ${result.errorMessage}",
                 "text": `Site check result: ${result.url} ${result.success ? 'was successful' : 'failed'}.`,
-            	"color": result.success ? "good" : "danger",
-            	"fields": Object.keys(propertyFieldTitles).reduce((fields, currentProperty) => {
+                "color": result.success ? "good" : "danger",
+                "fields": Object.keys(propertyFieldTitles).reduce((fields, currentProperty) => {
                     if(!result[currentProperty]) {
                         return fields;
                     }
@@ -47,7 +47,6 @@ exports.handler = function (event, context, callback) {
                             "short": true
                         });
                     }
-
 
                     return fields;
                 }, [])
