@@ -13,11 +13,11 @@ function sendSnsEvent(topicArn, subject, message) {
             Subject: subject,
             TopicArn: topicArn
         }, err => {
-          if(err) {
-              reject(`Failed to send SNS ${err}`);
-          }
+            if(err) {
+                reject(`Failed to send SNS ${err}`);
+            }
 
-          resolve();
+            resolve();
         });
     });
 }

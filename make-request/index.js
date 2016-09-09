@@ -40,11 +40,11 @@ function sendSnsEvent(topicArn, subject, message) {
             Subject: subject,
             TopicArn: topicArn
         }, err => {
-          if(err) {
-              reject(`Failed to send SNS ${err}`);
-          }
+            if(err) {
+                reject(`Failed to send SNS ${err}`);
+            }
 
-          resolve();
+            resolve();
         });
     });
 }
@@ -75,7 +75,7 @@ exports.handler = function (event, context, callback) {
             .catch(err => callback(err));
     });
 
-    req.setTimeout(timeout, function( ) {
+    req.setTimeout(timeout, () => {
         const result = buildTimeoutResult(url, timeout);
         hasTimedOut = true;
 

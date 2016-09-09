@@ -1,6 +1,5 @@
 'use strict';
 
-const AWS = require("aws-sdk");
 const https = require("https");
 const slackWebhookPath = "%SLACK_WEBHOOK_PATH%";
 
@@ -19,8 +18,8 @@ exports.handler = function (event, context, callback) {
         host: "hooks.slack.com",
         path: slackWebhookPath,
         method: "POST"
-      }, (res) => {
-      callback();
+    }, () => {
+        callback();
     });
 
     req.write(JSON.stringify({

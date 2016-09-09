@@ -1,0 +1,28 @@
+{
+  "name": "lambda-overwatch",
+  "version": "1.0.0",
+  "description": "Started as an experiment first for me to learn AWS Lambda",
+  "main": "index.js",
+  "dependencies": {
+    "eslint": "^3.4.0",
+    "mocha": "^3.0.2"
+  },
+  "devDependencies": {
+    "mocha": "^3.0.2"
+  },
+  "scripts": {
+    "test": "npm run lint && npm run mocha",
+    "lint": "node_modules/.bin/eslint index.js handle-result/**/*.js make-request/**/*.js send-to-slack/**/*.js",
+    "mocha": "node_modules/.bin/mocha --timeout 30000 ./tests/**/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tegud/lambda-overwatch.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tegud/lambda-overwatch/issues"
+  },
+  "homepage": "https://github.com/tegud/lambda-overwatch#readme"
+}
