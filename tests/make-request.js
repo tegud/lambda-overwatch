@@ -35,5 +35,11 @@ describe('make-request', () => {
         }))().should.eventually.have.properties({
             "success":true
         }));
+
+        it('sets timeToFirstByte', () => (() => new Promise(resolve => {
+            awsSdk.on('SNS', '%RESULT_SNS_TOPIC_ARN%', 'message-received', payload => resolve(JSON.parse(payload.Message)));
+
+            makeRequest.handler({ url: 'http://localhost:1234' }, {}, () => { });
+        }))().should.eventually.have.properties("timeToFirstByte"));
     });
 });
