@@ -51,7 +51,7 @@ function sendSnsEvent(topicArn, subject, message) {
 }
 
 exports.handler = function (event, context, callback) {
-    const url = event.url;
+    const url = event.url || context.params.url;
     const timeout = event.timeout || 3000;
     let hasTimedOut;
     const start = new Date().valueOf();
