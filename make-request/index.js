@@ -51,7 +51,7 @@ function sendSnsEvent(topicArn, subject, message) {
 }
 
 exports.handler = function (event, context, callback) {
-    const url = event.url || context.params.url;
+    const url = event.url;
     const timeout = event.timeout || 3000;
     let hasTimedOut;
     const start = new Date().valueOf();
@@ -60,6 +60,8 @@ exports.handler = function (event, context, callback) {
 
     if(!url) {
         console.log(JSON.stringify(event, null, 4));
+        console.log('**********************************');
+        console.log(JSON.stringify(context, null, 4));
     }
 
     const req = http.get(url, (res) => {
