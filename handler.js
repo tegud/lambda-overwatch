@@ -1,11 +1,11 @@
 module.exports.makeRequest = (event, context, callback) => {
-    callback(null, response);
+    callback(null);
 };
 
 module.exports.handleRequest = (event, context, callback) => {
-    callback(null, response);
+    callback(null);
 };
 
 module.exports.sendToSlack = (event, context, callback) => {
-    callback(null, response);
+    callback(null);
 };
