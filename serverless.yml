@@ -1,0 +1,13 @@
+service: lambda-overwatch
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+
+functions:
+  makeRequest:
+    handler: handler.makeRequest
+  handleRequest:
+    handler: handler.handleRequest
+  sendToSlack:
+    handler: handler.sendToSlack
