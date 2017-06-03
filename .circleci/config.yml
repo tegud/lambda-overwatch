@@ -7,9 +7,6 @@ jobs:
     steps:
       - checkout
       - run:
-          name: hmmmm
-          command: echo $AWS_ACCESS_KEY_ID
-      - run:
           name: deploy
           command: serverless deploy
       - store_artifacts:
