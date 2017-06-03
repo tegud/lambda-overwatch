@@ -7,9 +7,6 @@ jobs:
     steps:
       - checkout
       - run:
-          name: install serverless
-          command: npm i -g serverless
-      - run:
           name: deploy
           command: serverless deploy
       - store_artifacts:
