@@ -9,7 +9,8 @@ jobs:
       - run:
           name: install serverless
           command: npm i -g serverless
-      - run: test
+      - run:
+          name: test
           command: serverless deploy list
       - run:
           name: deploy
