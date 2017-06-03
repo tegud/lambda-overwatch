@@ -3,9 +3,12 @@ jobs:
   build:
     working_directory: /tmp/build
     docker:
-      - image: tegud/circleci-nodejs-serverless
+      - image: tegud/circleci-nodejs-docker
     steps:
       - checkout
+      - run:
+          name: install serverless
+          command: npm i -g serverless
       - run:
           name: deploy
           command: serverless deploy
