@@ -2,6 +2,7 @@ service: lambda-overwatch
 
 provider:
   name: aws
+  region: eu-west-1
   runtime: nodejs6.10
 
 functions:
