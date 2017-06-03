@@ -1,4 +1,4 @@
-service: lambda-overwatch
+service: overwatch
 
 provider:
   name: aws
