@@ -11,7 +11,7 @@ jobs:
           command: npm i -g serverless
       - run:
           name: test
-          command: serverless deploy list
+          command: serverless config credentials --provider aws --key "$AWS_ACCESS_KEY_ID" --secret "$AWS_SECRET_ACCESS_KEY"
       - run:
           name: deploy
           command: serverless deploy
