@@ -22,6 +22,8 @@ functions:
           rate: rate(5 minutes)
           input:
             url: https://www.tegud.net/
+            accountId: ${env:AWS_ACCOUNT_ID}
+            regionId: ${env:AWS_REGION}
   handleRequest:
     handler: handle-request.handleRequest
     environment:

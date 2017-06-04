@@ -52,8 +52,8 @@ module.exports.makeRequest = (event, context, callback) => {
     let hasTimedOut;
     const start = new Date().valueOf();
 
-    const accountId = event.account;
-    const region = event.region;
+    const accountId = process.env.accountId;
+    const region = process.env.region;
     const snsTopic = process.env.snsTopic;
 
     const snsTopicArn = `arn:aws:sns:${region}:${accountId}:${snsTopic}`;
