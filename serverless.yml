@@ -4,10 +4,16 @@ provider:
   name: aws
   region: eu-west-1
   runtime: nodejs6.10
-
+  iamRoleStatements:
+    - Effect: "Allow"
+      Resource: "*"
+      Action:
+        - "sns:*"
 functions:
-  makeRequest:
-    handler: handler.makeRequest
+  make-request:
+    handler: makeRequest.makeRequest
+    events:
+      - schedule: rate(5 minutes)
   handleRequest:
     handler: handler.handleRequest
   sendToSlack:
