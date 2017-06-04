@@ -22,7 +22,7 @@ functions:
           rate: rate(5 minutes)
           input:
             url: https://www.tegud.net/
-            region: ${env:AWS_ACCOUNT_ID}
+            region: ${env:AWS_REGION}
             snsTopic: ${self:custom.requestCompleteTopic}
   handleRequest:
     handler: handle-request.handleRequest
