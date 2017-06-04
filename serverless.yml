@@ -13,7 +13,10 @@ functions:
   make-request:
     handler: make-request.makeRequest
     events:
-      - schedule: rate(5 minutes)
+      - schedule:
+          rate: rate(5 minutes)
+          input:
+            url: https://www.tegud.net/
   handleRequest:
     handler: handler.handleRequest
   sendToSlack:
