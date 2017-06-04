@@ -1,9 +1,10 @@
 service: lambda-overwatch
-
 provider:
   name: aws
   region: eu-west-1
   runtime: nodejs6.10
+  custom:
+    requestCompleteTopic: site-check-complete
   iamRoleStatements:
     - Effect: "Allow"
       Resource: "*"
@@ -17,7 +18,10 @@ functions:
           rate: rate(5 minutes)
           input:
             url: https://www.tegud.net/
+            snsTopic: ${self:custom.requestCompleteTopic}
   handleRequest:
     handler: handler.handleRequest
+    events:
+      - sns: ${self:custom.requestCompleteTopic}
   sendToSlack:
     handler: handler.sendToSlack

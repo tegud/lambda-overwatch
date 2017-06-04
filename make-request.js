@@ -1,5 +1,4 @@
 const AWS = require("aws-sdk");
-const snsTopicArn = "%RESULT_SNS_TOPIC_ARN%";
 
 function buildResult(url, response, timeout, ttfb) {
     const result = {
@@ -52,6 +51,12 @@ module.exports.makeRequest = (event, context, callback) => {
     const timeout = event.timeout || 3000;
     let hasTimedOut;
     const start = new Date().valueOf();
+
+    const accountId = event.account;
+    const region = event.region;
+    const snsTopic = event.snsTopic;
+
+    const snsTopicArn = `arn:aws:sns:${region}:${accountId}:${snsTopic}`;
 
     console.log(`Testing url: ${url}, with timeout: ${timeout}`);
 
