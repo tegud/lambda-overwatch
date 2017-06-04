@@ -58,8 +58,15 @@ module.exports.makeRequest = (event, context, callback) => {
 
     const snsTopicArn = `arn:aws:sns:${region}:${accountId}:${snsTopic}`;
 
-    if(!region || !accountId) {
+    if(!region || !snsTopic) {
+        console.log('Region or sns topic not set')
         console.log(JSON.stringify(event, null, 4));
+        return callback(new Error('Region or sns topic not set'));
+    }
+
+    if(!accountId) {
+        console.log('AccountID not set');
+        return callback(new Error('AccountID not set'));
     }
 
     console.log(`Testing url: ${url}, with timeout: ${timeout}, SNS ARN: ${snsTopicArn}`);
