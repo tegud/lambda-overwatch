@@ -1,6 +1,8 @@
 service: lambda-overwatch
 custom:
   requestCompleteTopic: site-check-complete
+  checkCompleteTopic: check-complete
+  checkFailedTopic: check-failed
 provider:
   name: aws
   region: eu-west-1
@@ -13,15 +15,33 @@ provider:
 functions:
   make-request:
     handler: make-request.makeRequest
+    environment:
+      snsTopic: ${self:custom.requestCompleteTopic}
     events:
       - schedule:
           rate: rate(5 minutes)
           input:
             url: https://www.tegud.net/
-            snsTopic: ${self:custom.requestCompleteTopic}
   handleRequest:
-    handler: handler.handleRequest
+    handler: handle-request.handleRequest
+    environment:
+      completeSnsTopic: ${self:custom.checkCompleteTopic}
+      failedSnsTopic: ${self:custom.checkFailedTopic}
     events:
       - sns: ${self:custom.requestCompleteTopic}
   sendToSlack:
     handler: handler.sendToSlack
+    environment:
+      webhookUrl: ${env:SLACK_WEBHOOK_URL}
+    events:
+      - sns: ${self:custom.checkCompleteTopic}
+resources:
+  Resources:
+    MailQueue:
+      Type: AWS::SNS::Topic
+      Properties:
+        DisplayName: "Lambda Overwatch"
+        TopicName: ${self:custom.checkFailedTopic}
+        Subscription:
+          - Endpoint: ${env:FAILURE_EMAIL_TO}
+            Protocol: "email"

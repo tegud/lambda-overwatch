@@ -54,7 +54,7 @@ module.exports.makeRequest = (event, context, callback) => {
 
     const accountId = event.account;
     const region = event.region;
-    const snsTopic = event.snsTopic;
+    const snsTopic = process.env.snsTopic;
 
     const snsTopicArn = `arn:aws:sns:${region}:${accountId}:${snsTopic}`;
 
