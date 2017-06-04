@@ -58,7 +58,7 @@ module.exports.makeRequest = (event, context, callback) => {
 
     const snsTopicArn = `arn:aws:sns:${region}:${accountId}:${snsTopic}`;
 
-    console.log(`Testing url: ${url}, with timeout: ${timeout}`);
+    console.log(`Testing url: ${url}, with timeout: ${timeout}, SNS ARN: ${snsTopicArn}`);
 
     if(!url) {
         console.log(JSON.stringify(event, null, 4));
