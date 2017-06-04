@@ -7,6 +7,8 @@ provider:
   name: aws
   region: eu-west-1
   runtime: nodejs6.10
+  environment:
+    accountId: ${env:AWS_ACCOUNT_ID}
   iamRoleStatements:
     - Effect: "Allow"
       Resource: "*"
@@ -15,15 +17,13 @@ provider:
 functions:
   make-request:
     handler: make-request.makeRequest
-    environment:
-      snsTopic: ${self:custom.requestCompleteTopic}
     events:
       - schedule:
           rate: rate(5 minutes)
           input:
             url: https://www.tegud.net/
-            accountId: ${env:AWS_ACCOUNT_ID}
-            regionId: ${env:AWS_REGION}
+            region: ${env:AWS_ACCOUNT_ID}
+            snsTopic: ${self:custom.requestCompleteTopic}
   handleRequest:
     handler: handle-request.handleRequest
     environment:
