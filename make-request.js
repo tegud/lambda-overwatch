@@ -1,5 +1,5 @@
 const AWS = require("aws-sdk");
-const http = require('http');
+const http = ;
 const snsTopicArn = "%RESULT_SNS_TOPIC_ARN%";
 
 function buildResult(url, response, timeout, ttfb) {
@@ -63,7 +63,7 @@ module.exports.makeRequest = (event, context, callback) => {
         return callback(new Error('No url provided'));
     }
 
-    const req = http.get(url, (res) => {
+    const req = require(url.startsWith('https://') ? 'https' : 'http').get(url, (res) => {
         const end = new Date().valueOf();
         if(hasTimedOut) {
             console.log('Timed out, but response has returned eventually, do nothing.');
