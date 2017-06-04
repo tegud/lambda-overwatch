@@ -1,10 +1,10 @@
 service: lambda-overwatch
+custom:
+  requestCompleteTopic: site-check-complete
 provider:
   name: aws
   region: eu-west-1
   runtime: nodejs6.10
-  custom:
-    requestCompleteTopic: site-check-complete
   iamRoleStatements:
     - Effect: "Allow"
       Resource: "*"
