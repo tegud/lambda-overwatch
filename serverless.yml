@@ -11,7 +11,7 @@ provider:
         - "sns:*"
 functions:
   make-request:
-    handler: makeRequest.makeRequest
+    handler: make-request.makeRequest
     events:
       - schedule: rate(5 minutes)
   handleRequest:
