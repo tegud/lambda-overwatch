@@ -27,7 +27,7 @@ module.exports.handleRequest = (event, context, callback) => {
     const region = process.env.region;
 
     const snsFailureTopicArn = `arn:aws:sns:${region}:${accountId}:${snsFailureTopic}`;
-    const snsCompleteTopicArn = `arn:aws:sns:${region}:${accountId}:${snsCompleteTopicArn}`;
+    const snsCompleteTopicArn = `arn:aws:sns:${region}:${accountId}:${snsCompleteTopic}`;
 
     sendSnsEvent(snsCompleteTopicArn, `SITE RESULT: ${result.url}`, result)
       .then(() => {
