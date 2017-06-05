@@ -27,6 +27,7 @@ functions:
   handleRequest:
     handler: handle-request.handleRequest
     environment:
+      region: ${env:AWS_REGION}
       completeSnsTopic: ${self:custom.checkCompleteTopic}
       failedSnsTopic: ${self:custom.checkFailedTopic}
     events:

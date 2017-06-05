@@ -20,8 +20,14 @@ function sendSnsEvent(topicArn, subject, message) {
 
 module.exports.handleRequest = (event, context, callback) => {
     const result = JSON.parse(event.Records[0].Sns.Message);
-    const snsFailureTopicArn = process.env.failureSnsTopic;
-    const snsCompleteTopicArn = process.env.completeSnsTopic;
+    const snsFailureTopic = process.env.failureSnsTopic;
+    const snsCompleteTopic = process.env.completeSnsTopic;
+
+    const accountId = process.env.accountId;
+    const region = process.env.region;
+
+    const snsFailureTopicArn = `arn:aws:sns:${region}:${accountId}:${snsFailureTopic}`;
+    const snsCompleteTopicArn = `arn:aws:sns:${region}:${accountId}:${snsCompleteTopicArn}`;
 
     sendSnsEvent(snsCompleteTopicArn, `SITE RESULT: ${result.url}`, result)
       .then(() => {
