@@ -35,7 +35,7 @@ functions:
   sendToSlack:
     handler: send-to-slack.sendToSlack
     environment:
-      webhookUrl: ${env:SLACK_WEBHOOK_URL}
+      webhookUrl: ${env:SLACK_WEBHOOK_PATH}
     events:
       - sns: ${self:custom.checkCompleteTopic}
 resources:
