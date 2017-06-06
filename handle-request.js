@@ -20,7 +20,7 @@ function sendSnsEvent(topicArn, subject, message) {
 
 module.exports.handleRequest = (event, context, callback) => {
     const result = JSON.parse(event.Records[0].Sns.Message);
-    const snsFailureTopic = process.env.failureSnsTopic;
+    const snsFailureTopic = process.env.failedSnsTopic;
     const snsCompleteTopic = process.env.completeSnsTopic;
 
     const accountId = process.env.accountId;
