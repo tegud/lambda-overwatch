@@ -20,6 +20,8 @@ module.exports.sendToSlack = function (event, context, callback) {
         callback();
     });
 
+    console.log(`Sending to slack path: "${slackWebhookPath}", message: "Site check result: ${result.url} ${result.success ? 'was successful' : 'failed'}"`);
+
     req.write(JSON.stringify({
         attachments: [
             {
