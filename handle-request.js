@@ -29,6 +29,13 @@ module.exports.handleRequest = (event, context, callback) => {
     const snsFailureTopicArn = `arn:aws:sns:${region}:${accountId}:${snsFailureTopic}`;
     const snsCompleteTopicArn = `arn:aws:sns:${region}:${accountId}:${snsCompleteTopic}`;
 
+    const topicsToSendTo = [
+        snsCompleteTopicArn,
+        ...(result.success ? [] : [snsFailureTopicArn])
+    ];
+
+    console.log(`Handling request for ${result.url}, success: ${result.success}, sendingToTopics: ${topicsToSendTo.join(', ')}`);
+
     sendSnsEvent(snsCompleteTopicArn, `SITE RESULT: ${result.url}`, result)
       .then(() => {
           if(result.success) {
