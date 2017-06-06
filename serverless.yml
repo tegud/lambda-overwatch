@@ -33,7 +33,7 @@ functions:
     events:
       - sns: ${self:custom.requestCompleteTopic}
   sendToSlack:
-    handler: handler.sendToSlack
+    handler: send-to-slack.sendToSlack
     environment:
       webhookUrl: ${env:SLACK_WEBHOOK_URL}
     events:
