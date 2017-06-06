@@ -24,6 +24,18 @@ functions:
             url: https://www.tegud.net/
             region: ${env:AWS_REGION}
             snsTopic: ${self:custom.requestCompleteTopic}
+      - schedule:
+          rate: rate(5 minutes)
+          input:
+            url: https://www.sparkfitness.co.uk/
+            region: ${env:AWS_REGION}
+            snsTopic: ${self:custom.requestCompleteTopic}
+      - schedule:
+          rate: rate(5 minutes)
+          input:
+            url: http://www.mrsdsdoggrooming.com/
+            region: ${env:AWS_REGION}
+            snsTopic: ${self:custom.requestCompleteTopic}
   handleRequest:
     handler: handle-request.handleRequest
     environment:
