@@ -1,4 +1,5 @@
 const AWS = require("aws-sdk");
+const request = require('request');
 
 function buildResult(url, response, timeout, ttfb) {
     const result = {
@@ -78,7 +79,9 @@ module.exports.makeRequest = (event, context, callback) => {
         return callback(new Error('No url provided'));
     }
 
-    const req = require(url.startsWith('https://') ? 'https' : 'http').get(url, (res) => {
+    const req = request({
+        url: url
+    }, (err, res, body) => {
         const end = new Date().valueOf();
         if(hasTimedOut) {
             console.log('Timed out, but response has returned eventually, do nothing.');

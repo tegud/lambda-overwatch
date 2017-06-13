@@ -1,0 +1,22 @@
+{
+  "name": "lambda-overwatch",
+  "version": "1.0.0",
+  "description": "",
+  "main": "make-request.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tegud/lambda-overwatch.git"
+  },
+  "author": "Steve Elliott",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tegud/lambda-overwatch/issues"
+  },
+  "homepage": "https://github.com/tegud/lambda-overwatch#readme",
+  "dependencies": {
+    "request": "^2.81.0"
+  }
+}
