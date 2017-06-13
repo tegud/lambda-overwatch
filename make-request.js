@@ -79,13 +79,34 @@ module.exports.makeRequest = (event, context, callback) => {
         return callback(new Error('No url provided'));
     }
 
-    const req = request({
-        url: url
-    }, (err, res, body) => {
+    request({
+        url: url,
+        timeout: timeout
+    }, (err, res) => {
         const end = new Date().valueOf();
-        if(hasTimedOut) {
-            console.log('Timed out, but response has returned eventually, do nothing.');
-            return;
+
+        if(err) {
+            if(err.code === 'ETIMEDOUT') {
+                const result = buildTimeoutResult(url, timeout);
+                hasTimedOut = true;
+
+                console.log('Request timed out.');
+
+                sendSnsEvent(snsTopicArn, "site-monitor-result", result)
+                .then(() => callback())
+                .catch(err => callback(err));
+
+                return;
+            }
+
+            sendSnsEvent(snsTopicArn, "site-monitor-result", {
+                success: false,
+                url: url,
+                timeout: timeout,
+                errorMessage: err.message || err
+            })
+                .then(() => callback())
+                .catch(err => callback(err))
         }
 
         const result = buildResult(url, res, timeout, end - start);
@@ -94,26 +115,4 @@ module.exports.makeRequest = (event, context, callback) => {
             .then(() => callback())
             .catch(err => callback(err));
     });
-
-    req.setTimeout(timeout, () => {
-        const result = buildTimeoutResult(url, timeout);
-        hasTimedOut = true;
-
-        console.log('Request timed out.');
-
-        sendSnsEvent(snsTopicArn, "site-monitor-result", result)
-            .then(() => callback())
-            .catch(err => callback(err));
-    });
-
-    req.on('error', error => sendSnsEvent(snsTopicArn, "site-monitor-result", {
-        success: false,
-        url: url,
-        timeout: timeout,
-        errorMessage: error.code || error
-    })
-    .then(() => callback())
-    .catch(err => callback(err)));
-
-    req.end();
 };
