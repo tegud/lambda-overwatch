@@ -10,7 +10,16 @@ jobs:
           name: install dependencies
           command: npm install
       - run:
+          name: test
+          command: npm test
+      - run:
           name: deploy
           command: serverless deploy
       - store_artifacts:
           path: /tmp/build/.serverless/
+      - store_artifacts:
+          path: test-results.xml
+          prefix: tests
+      - store_test_results:
+          path: test-results.xml
+          
