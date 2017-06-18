@@ -9,7 +9,7 @@ function sendSnsEvent(topicArn, subject, message) {
             Subject: subject,
             TopicArn: topicArn
         }, err => {
-            if(err) {
+            if (err) {
                 reject(`Failed to send SNS ${err}`);
             }
 
@@ -37,15 +37,15 @@ module.exports.handleRequest = (event, context, callback) => {
     console.log(`Handling request for ${result.url}, success: ${result.success}, sendingToTopics: ${topicsToSendTo.join(', ')}`);
 
     sendSnsEvent(snsCompleteTopicArn, `SITE RESULT: ${result.url}`, result)
-      .then(() => {
-          if(result.success) {
-              console.log('Site monitor ok, nothing to do');
-              return new Promise(resolve => resolve());
-          }
+        .then(() => {
+            if (result.success) {
+                console.log('Site monitor ok, nothing to do');
+                return new Promise(resolve => resolve());
+            }
 
-          console.log('Site monitor fail, sending to failure SNS');
-          return sendSnsEvent(snsFailureTopicArn, `SITE FAIL: ${result.url}`, result.errorMessage || result);
-      })
-      .then(() => callback())
-      .catch(callback);
+            console.log('Site monitor fail, sending to failure SNS');
+            return sendSnsEvent(snsFailureTopicArn, `SITE FAIL: ${result.url}`, result.errorMessage || result);
+        })
+        .then(() => callback())
+        .catch(callback);
 };

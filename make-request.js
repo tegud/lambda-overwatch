@@ -9,7 +9,7 @@ function buildResult(url, response, timeout, ttfb) {
         timeout: timeout
     };
 
-    if(result.success) {
+    if (result.success) {
         result.timeToFirstByte = ttfb;
 
         return result;
@@ -38,7 +38,7 @@ function sendSnsEvent(topicArn, subject, message) {
             Subject: subject,
             TopicArn: topicArn
         }, err => {
-            if(err) {
+            if (err) {
                 reject(`Failed to send SNS ${err}`);
             }
 
@@ -50,7 +50,6 @@ function sendSnsEvent(topicArn, subject, message) {
 module.exports.makeRequest = (event, context, callback) => {
     const url = event.url;
     const timeout = event.timeout || 3000;
-    let hasTimedOut;
     const start = new Date().valueOf();
 
     const accountId = process.env.accountId;
@@ -59,20 +58,20 @@ module.exports.makeRequest = (event, context, callback) => {
 
     const snsTopicArn = `arn:aws:sns:${region}:${accountId}:${snsTopic}`;
 
-    if(!region || !snsTopic) {
+    if (!region || !snsTopic) {
         console.log('Region or sns topic not set')
         console.log(JSON.stringify(event, null, 4));
         return callback(new Error('Region or sns topic not set'));
     }
 
-    if(!accountId) {
+    if (!accountId) {
         console.log('AccountID not set');
         return callback(new Error('AccountID not set'));
     }
 
     console.log(`Testing url: ${url}, with timeout: ${timeout}, SNS ARN: ${snsTopicArn}`);
 
-    if(!url) {
+    if (!url) {
         console.log(JSON.stringify(event, null, 4));
         console.log('**********************************');
         console.log(JSON.stringify(context, null, 4));
@@ -85,16 +84,15 @@ module.exports.makeRequest = (event, context, callback) => {
     }, (err, res) => {
         const end = new Date().valueOf();
 
-        if(err) {
-            if(err.code === 'ETIMEDOUT') {
+        if (err) {
+            if (err.code === 'ETIMEDOUT') {
                 const result = buildTimeoutResult(url, timeout);
-                hasTimedOut = true;
 
                 console.log('Request timed out.');
 
                 sendSnsEvent(snsTopicArn, "site-monitor-result", result)
-                .then(() => callback())
-                .catch(err => callback(err));
+                    .then(() => callback())
+                    .catch(err => callback(err));
 
                 return;
             }
