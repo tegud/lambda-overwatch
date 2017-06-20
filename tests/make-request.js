@@ -20,32 +20,39 @@ describe('make-request', () => {
 
         return createTopic(sns, 'complete')
             .then(() => new Promise(resolve => sns.subscribe({
-                Protocol: 'http',
-                TopicArn: 'arn:aws:sns:eu-west-1:DUMMYID:complete'
-            }, (err, event, message) => {
+                Protocol: 'lambda',
+                TopicArn: 'arn:aws:sns:eu-west-1:DUMMYID:complete',
+                Endpoint: 'CollectResult'
+            }, err => {
                 if(err) {
                     console.log(`Error subscribing to topic: ${err.message}`);
                     return resolve();
                 }
 
-                console.log(err);
-                console.log(event);
-                console.log(message);
-                lastMessage = message;
-
                 resolve();
             })))
+            .then(() => new Promise(resolve => {
+                SNSSimulator.registerLambda('CollectResult', (event, message, cb) => {
+                    lastMessage = event.Records[0].Sns.Message;
+                    cb();
+                });
+                resolve();
+            }))
     });
 
-    it.skip('sends a message to SNS', () => (() => new Promise(resolve => makeRequest({
-        url: "https://www.tegud.net",
-        region: "eu-west-1",
-        snsTopic: "complete"
-    }, {}, err => {
-        if(err) {
-            console.log(err);
-        }
-        resolve(lastMessage);
-    })))()
-        .should.eventually.eql({}));
+    it('sends a message to SNS', () => (() => new Promise(resolve => makeRequest({
+            url: "https://www.tegud.net",
+            region: "eu-west-1",
+            snsTopic: "complete"
+        }, {}, err => {
+            if(err) {
+                console.log(err);
+            }
+
+            const parsedMessage = JSON.parse(lastMessage);
+            delete parsedMessage.timeToFirstByte;
+
+            resolve(parsedMessage);
+        })))()
+        .should.eventually.eql({"url":"https://www.tegud.net","statusCode":200,"success":true,"timeout":3000}));
 });
