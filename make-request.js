@@ -80,17 +80,33 @@ module.exports.makeRequest = (event, context, callback) => {
 
     request({
         url: url,
+        headers: {
+            'User-Agent': `lambda-overwatch/1.0 (aws-lambda node-js/${process.version})`
+        },
         timeout: timeout
     }, (err, res) => {
         const end = new Date().valueOf();
 
         if (err) {
-            if (err.code === 'ETIMEDOUT') {
+            if (err.code === 'ETIMEDOUT' || err.code === 'ESOCKETTIMEDOUT') {
                 const result = buildTimeoutResult(url, timeout);
 
                 console.log('Request timed out.');
 
                 sendSnsEvent(snsTopicArn, "site-monitor-result", result)
+                    .then(() => callback())
+                    .catch(err => callback(err));
+
+                return;
+            }
+
+            if(err.code === 'ECONNREFUSED') {
+                sendSnsEvent(snsTopicArn, "site-monitor-result", {
+                    success: false,
+                    url: url,
+                    timeout: timeout,
+                    errorMessage: `Could not connect`
+                })
                     .then(() => callback())
                     .catch(err => callback(err));
 
@@ -105,6 +121,8 @@ module.exports.makeRequest = (event, context, callback) => {
             })
                 .then(() => callback())
                 .catch(err => callback(err))
+
+            return;
         }
 
         const result = buildResult(url, res, timeout, end - start);
