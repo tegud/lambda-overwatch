@@ -1,12 +1,8 @@
 service: lambda-overwatch
-custom:
-  requestCompleteTopic: site-check-complete
-  checkCompleteTopic: check-complete
-  checkFailedTopic: check-failed
 provider:
   name: aws
   region: eu-west-1
-  runtime: nodejs6.10
+  runtime: nodejs8.10
   environment:
     accountId: ${env:AWS_ACCOUNT_ID}
   iamRoleStatements:
@@ -14,49 +10,9 @@ provider:
       Resource: "*"
       Action:
         - "sns:*"
+        - "s3:*"
 functions:
-  make-request:
-    handler: make-request.makeRequest
+  config-update:
+    handler: config.update
     events:
-      - schedule:
-          rate: rate(5 minutes)
-          input:
-            url: https://www.tegud.net/
-            region: ${env:AWS_REGION}
-            snsTopic: ${self:custom.requestCompleteTopic}
-      - schedule:
-          rate: rate(5 minutes)
-          input:
-            url: https://www.sparkfitness.co.uk/
-            region: ${env:AWS_REGION}
-            snsTopic: ${self:custom.requestCompleteTopic}
-      - schedule:
-          rate: rate(5 minutes)
-          input:
-            url: http://www.mrsdsdoggrooming.com/
-            region: ${env:AWS_REGION}
-            snsTopic: ${self:custom.requestCompleteTopic}
-  handleRequest:
-    handler: handle-request.handleRequest
-    environment:
-      region: ${env:AWS_REGION}
-      completeSnsTopic: ${self:custom.checkCompleteTopic}
-      failedSnsTopic: ${self:custom.checkFailedTopic}
-    events:
-      - sns: ${self:custom.requestCompleteTopic}
-  sendToSlack:
-    handler: send-to-slack.sendToSlack
-    environment:
-      webhookUrl: ${env:SLACK_WEBHOOK_PATH}
-    events:
-      - sns: ${self:custom.checkCompleteTopic}
-resources:
-  Resources:
-    MailQueue:
-      Type: AWS::SNS::Topic
-      Properties:
-        DisplayName: "Lambda Overwatch"
-        TopicName: ${self:custom.checkFailedTopic}
-        Subscription:
-          - Endpoint: ${env:FAILURE_EMAIL_TO}
-            Protocol: "email"
+      - s3: ${env:OVERWATCH_NAME}_photos

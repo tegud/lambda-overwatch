@@ -1,0 +1,14 @@
+checks:
+  - tegud.net
+      url: https://www.tegud.net
+      regions:
+        - eu-west-1
+        - us-east-1
+  - sparkfitness
+      url: https://www.sparkfitness.co.uk/
+      regions:
+        - eu-west-1
+  - mrsdsdoggrooming
+      url: http://www.mrsdsdoggrooming.com/
+      regions:
+        - eu-west-1
