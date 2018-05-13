@@ -22,9 +22,12 @@ module.exports.update = async (event, context, callback) => {
     try {
         const file = await getObjectFromS3(bucket, key);
         const fileData = file.Body.toString('utf-8');
-        const parsedData = yaml.safeLoad(fileData);
+        const checkConfig = yaml.safeLoad(fileData);
         
-        console.log(JSON.stringify(parsedData, null, 4));
+        const regions = Object.keys(checkConfig.checks)
+            .reduce((foundRegions, check) => [...foundRegions, ...check.regions.filter(region => !foundRegions.includes(region))], []);
+
+        console.log(`Configuration overwatch support for regions: ${regions.join(", ")}`);
 
         callback();
     }
