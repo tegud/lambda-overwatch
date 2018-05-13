@@ -2,7 +2,7 @@ const s3 = new AWS.S3();
 
 const getObjectFromS3 = async (Bucket, Key) => util.promisify(s3.getObject)({ Bucket, Key });
 
-module.exports.update = (event, context, callback) => {
+module.exports.update = async (event, context, callback) => {
     console.log(JSON.stringify(event, null, 4));
 
     const { eventName } = event.Records[0];
