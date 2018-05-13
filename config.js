@@ -3,7 +3,13 @@ const AWS = require("aws-sdk");
 
 const s3 = new AWS.S3();
 
-const getObjectFromS3 = async (Bucket, Key) => util.promisify(s3.getObject)({ Bucket, Key });
+const getObjectFromS3 = async (Bucket, Key) => new Promise((resolve, reject) => s3.getObject({ Bucket, Key }, (err, result) => {
+    if(err) {
+        return reject(err);
+    }
+
+    return resolve(result);
+}));
 
 module.exports.update = async (event, context, callback) => {
     console.log(JSON.stringify(event, null, 4));
