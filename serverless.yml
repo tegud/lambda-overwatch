@@ -15,4 +15,4 @@ functions:
   config-update:
     handler: config.update
     events:
-      - s3: ${env:OVERWATCH_NAME}_photos
+      - s3: ${env:OVERWATCH_NAME}-config
