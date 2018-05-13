@@ -1,4 +1,4 @@
-service: lambda-overwatch
+service: lambda-overwatch-2018
 provider:
   name: aws
   region: eu-west-1
