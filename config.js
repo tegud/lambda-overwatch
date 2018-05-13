@@ -23,7 +23,7 @@ module.exports.update = async (event, context, callback) => {
     try {
         const file = await getObjectFromS3(bucket, key);
 
-        console.log(JSON.stringify(file, null, 4));
+        console.log(file.Body.toString('utf-8'));
         
         callback();
     }
