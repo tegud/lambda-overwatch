@@ -1,5 +1,6 @@
 const util = require("util");
 const AWS = require("aws-sdk");
+const yaml = require('js-yaml');
 
 const s3 = new AWS.S3();
 
@@ -12,8 +13,6 @@ const getObjectFromS3 = async (Bucket, Key) => new Promise((resolve, reject) => 
 }));
 
 module.exports.update = async (event, context, callback) => {
-    console.log(JSON.stringify(event, null, 4));
-
     const { eventName } = event.Records[0];
     const bucket = event.Records[0].s3.bucket.name;
     const { key } = event.Records[0].s3.object;
@@ -22,9 +21,11 @@ module.exports.update = async (event, context, callback) => {
 
     try {
         const file = await getObjectFromS3(bucket, key);
-
-        console.log(file.Body.toString('utf-8'));
+        const fileData = file.Body.toString('utf-8');
+        const parsedData = yaml.safeLoad(fileData);
         
+        console.log(JSON.stringify(parsedData, null, 4));
+
         callback();
     }
     catch(error) {
