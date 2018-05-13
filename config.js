@@ -15,11 +15,13 @@ module.exports.update = async (event, context, callback) => {
     console.log(JSON.stringify(event, null, 4));
 
     const { eventName } = event.Records[0];
-    const { Bucket } = event.Records[0].s3.bucket.name;
-    const { Key } = event.Records[0].s3.object;
+    const bucket = event.Records[0].s3.bucket.name;
+    const { key } = event.Records[0].s3.object;
+
+    console.log(`Config updated in file ${key} in bucket ${bucket}`);
 
     try {
-        const file = await getObjectFromS3(Bucket, Key);
+        const file = await getObjectFromS3(bucket, key);
 
         console.log(JSON.stringify(file, null, 4));
         
