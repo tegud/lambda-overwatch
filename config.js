@@ -1,4 +1,6 @@
+const util = require("util");
 const AWS = require("aws-sdk");
+
 const s3 = new AWS.S3();
 
 const getObjectFromS3 = async (Bucket, Key) => util.promisify(s3.getObject)({ Bucket, Key });
